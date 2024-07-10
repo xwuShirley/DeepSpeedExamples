@@ -1,0 +1,45 @@
+pretrained_model_name_or_path: 'lambdalabs/sd-image-variations-diffusers'
+pretrained_unet_path: '/mnt/pfs/users/longxiaoxiao/workplace/Tune-A-Video/outputs/mvdiffusion-mix-6views-ortho-allattention-b64-threebgs-lvis-dropwhole/checkpoint-30000/'
+revision: null
+validation_dataset:
+  root_dir: '/mnt/pfs/users/longxiaoxiao/data/test_images/ours-testset-animals/'
+  num_views: 6
+  bg_color: 'white'
+  img_wh: [256, 256]
+  num_validation_samples: 1000
+  crop_size: 180
+  filepaths: ['Lion_600.png']
+
+
+pred_type: 'joint'
+
+save_dir: 'outputs/mvdiffusion-mix-6views-ortho-allattention-b64-threebgs-lvis-dropwhole/test3w/ours-testset-animals/'
+seed: 42
+validation_batch_size: 12
+dataloader_num_workers: 64
+
+local_rank: -1
+
+pipe_kwargs:
+  camera_embedding_type: 'e_de_da_sincos'
+  num_views: 6
+
+validation_guidance_scales: [3.0]
+pipe_validation_kwargs:
+  eta: 1.0
+validation_grid_nrow: 6
+
+unet_from_pretrained_kwargs:
+  camera_embedding_type: 'e_de_da_sincos'
+  projection_class_embeddings_input_dim: 10  
+  joint_attention: false  # modify
+  joint_attention_twice: false # modify
+  num_views: 6
+  sample_size: 32
+  zero_init_conv_in: false
+  zero_init_camera_projection: false  
+
+num_views: 6
+camera_embedding_type: 'e_de_da_sincos'
+
+enable_xformers_memory_efficient_attention: true

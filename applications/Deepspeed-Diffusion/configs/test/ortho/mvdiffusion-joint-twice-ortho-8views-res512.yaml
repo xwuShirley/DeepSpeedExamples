@@ -1,0 +1,81 @@
+pretrained_model_name_or_path: 'stabilityai/stable-diffusion-2-1-unclip'
+pretrained_unet_path: /vc_data/users/xwu/Model3d/render-data/mvdiffusion/wonder3dplus-SD21-unclip/wonder3dplus-SD21-unclip/outputs-512/mvdiffusion-unclip-8views0122real-emberlrx1-1e-4/unet-7500
+#/vc_data/users/xwu/Model3d/render-data/mvdiffusion/wonder3dplus-SD21-unclip/wonder3dplus-SD21-unclip/outputs-512/mvdiffusion-unclip-8views0120real/unet-12500 
+# '/mnt/pfs/users/longxiaoxiao/workplace/wonder3Dplus/outputs-512/ortho/mvdiffusion-mix-random2views/unet-20000/'
+
+revision: null
+validation_dataset:
+  # root_dir: '/mnt/pfs/users/longxiaoxiao/data/test_images/domain-sync/'
+  root_dir:  '/vc_data/users/xwu/Model3d/render-data/mvdiffusion/wonder3d-fullcode/example_images/'
+  num_views: 8
+  # data_view_num: 12
+  bg_color: 'white'
+  img_wh: [512, 512]
+  num_validation_samples: 100
+  crop_size: 448
+  filepaths:  ['yuanshen.png','trump.png', 'niu.png','girl.png','butterfly.png', 'two-people.png', 'marvel.png','white-solider.png'] 
+  read_normal: false
+
+pred_type: 'mix'
+
+save_dir: 'outputs-512/ortho-test/mvdiffusion-joint-8viewcheck'
+seed: 42
+validation_batch_size: 1
+dataloader_num_workers: 16
+validation_train_batch_size: 1
+max_train_steps: 20010
+gradient_accumulation_steps: 4
+gradient_checkpointing: true
+learning_rate: 1.e-5
+scale_lr: false
+lr_scheduler: "constant_with_warmup"
+lr_warmup_steps: 100
+camera_embedding_lr_mult: 0.1
+snr_gamma: 5.0
+use_8bit_adam: false
+allow_tf32: true
+use_ema: true  
+adam_beta1: 0.9
+adam_beta2: 0.999
+adam_weight_decay: 1.e-2
+adam_epsilon: 1.e-08
+max_grad_norm: 1.0
+prediction_type: null
+vis_dir: vis-unet-12500
+logging_dir: logs
+mixed_precision: "fp16"  # seems mixed_precision cause inf training problem
+report_to: 'tensorboard'
+local_rank: -1
+checkpointing_steps: 1250
+checkpoints_total_limit: 20
+resume_from_checkpoint: null #  latest  # modify
+enable_xformers_memory_efficient_attention: true
+validation_steps: 20000
+validation_sanity_check: true
+tracker_project_name: 'mvdiffusion-image-v1'
+
+pipe_kwargs:
+  num_views: 8
+
+validation_guidance_scales: [1., 3.]
+pipe_validation_kwargs:
+  eta: 1.0
+validation_grid_nrow: 16
+unet_from_pretrained_kwargs:
+  camera_embedding_type: 'e_de_da_sincos'
+  unclip: true
+  # encoder_hid_dim_type: 'text_proj'
+  # encoder_hid_dim: 1024  # 1024+10
+  # projection_class_embeddings_input_dim: 10  # modify
+  num_views: ${num_views}
+  sample_size: 64 # 32 for res256
+  zero_init_conv_in: true
+  zero_init_camera_projection: false
+  cd_attention_last: false
+  cd_attention_mid: false
+  multiview_attention: true
+  sparse_mv_attention: true
+  mvcd_attention: false
+num_views: 8
+camera_embedding_type: 'e_de_da_sincos'
+
